@@ -25,6 +25,11 @@ public class UserService {
     public List<User> getUsers() {
         return repository.findAll();
     }
+
+
+    public User getUserByUsername(String username){
+        return  repository.findUserByUsername(username);
+    }
     public void checkUser()
     {
 //        UserDto userFind = repository.findOne()

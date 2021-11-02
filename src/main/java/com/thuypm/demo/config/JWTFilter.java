@@ -1,7 +1,13 @@
 package com.thuypm.demo.config;
 
+import com.thuypm.demo.dto.UserDto;
+import com.thuypm.demo.enities.User;
 import com.thuypm.demo.helper.JWTUtils;
+import com.thuypm.demo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -13,6 +19,8 @@ import java.io.IOException;
 public class JWTFilter extends OncePerRequestFilter {
     @Autowired
     private JWTUtils jwt;
+    @Autowired
+    private UserService userService;
 
     private String getJwtFromRequest(HttpServletRequest request) {
         String authHeader = request.getHeader("Authorization");
@@ -26,9 +34,19 @@ public class JWTFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
         try {
+            String jwtToken = getJwtFromRequest(httpServletRequest);
+            if (StringUtils.hasText(jwtToken) && this.jwt.validateToken(jwtToken)) {
+                String username = jwt.getUsernameFromJWT(jwtToken);
+                User user = userService.getUserByUsername(username);
+                if (user != null) {
+//                    UsernamePasswordAuthenticationToken
+//                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-        }catch(Exception exception)
-        {
+                    SecurityContextHolder.getContext().setAuthentication();
+                }
+
+            }
+        } catch (Exception exception) {
 
         }
     }
