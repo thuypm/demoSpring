@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,7 +28,21 @@ public class AuthController {
     private UserService service;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public List<User> getUserList() {
+    public List<User> login() {
+        return this.service.getUsers();
+    }
+    @RequestMapping(value = "/test", method = RequestMethod.GET)
+    public String getUserList() {
+        System.out.println(" đã vào đây ");
+        return "{}";
+    }
+
+    @PostMapping(value = "/signup")
+    public List<User> createUser(User model) {
+        System.out.println(model);
+        System.out.println("model");
+
+//        Boolean checkExisting = this.service.getUserByUsername()
         return this.service.getUsers();
     }
 }

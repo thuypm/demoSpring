@@ -26,6 +26,9 @@ public class UserService {
         return repository.findAll();
     }
 
+//    public List<User> createUser(User body ){
+//        return repository.save(body)
+//    }
 
     public User getUserByUsername(String username){
         return  repository.findUserByUsername(username);

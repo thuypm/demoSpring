@@ -20,12 +20,12 @@ import java.util.Date;
 public class JWTUtils {
     @Value("demo.app.jwtSecret")
     private String jwtSecret;
-    @Value("demo.app.jwtExpirationMs")
-    private int jwtExpiration;
+//    @Value("demo.app.jwtExpirationMs")
+//    private int jwtExpiration;
 
     public String generateToken(UserDto user) {
         Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + this.jwtExpiration);
+        Date expiryDate = new Date(now.getTime() );
 
         return Jwts.builder()
                 .setSubject(user.getUsername())

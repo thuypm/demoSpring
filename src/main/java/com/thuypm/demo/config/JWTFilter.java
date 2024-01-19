@@ -7,6 +7,7 @@ import com.thuypm.demo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -39,15 +40,14 @@ public class JWTFilter extends OncePerRequestFilter {
                 String username = jwt.getUsernameFromJWT(jwtToken);
                 User user = userService.getUserByUsername(username);
                 if (user != null) {
-//                    UsernamePasswordAuthenticationToken
-//                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-                    SecurityContextHolder.getContext().setAuthentication();
+                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null, null);
+                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
 
             }
         } catch (Exception exception) {
-
+            throw exception;
         }
     }
 }
